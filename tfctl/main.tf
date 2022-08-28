@@ -1,37 +1,27 @@
-/* resource "aws_instance" "my_instance" {
-  ami           = "ami-0ea5eb4b05645aa8a"
-  instance_type = "t3.micro"
-
-  tags = {
-    Name = "MyInstance"
-  }
-} */
-
-/* 
-resource "aws_instance" "my_instance_b" {
-  ami           = "ami-0ea5eb4b05645aa8a"
-  instance_type = "t3.micro"
-  depends_on = [
-    aws_s3_bucket.my_bucket
-  ]
-
-  tags = {
-    Name = "MyInstanceB"
+locals {
+  common_tags = {
+    Name        = "${var.project_name}-${var.environment}"
+    Project     = var.project_name
+    Environment = var.environment
   }
 }
 
-resource "aws_eip" "my_eip" {
-  vpc      = true
-  instance = aws_instance.my_instance_a.id
+### VPN 생성
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "3.14.2"
+
+  name            = var.name
+  cidr            = var.cidr
+  azs             = var.azs
+  private_subnets = var.private_subnets
+  public_subnets  = var.public_subnets
+
+  enable_nat_gateway = false
+  enable_vpn_gateway = false
+
   tags = {
-    "Name" = "MyInstanceA"
+    Terraform   = "true"
+    Environment = "dev"
   }
 }
-
-resource "aws_s3_bucket" "my_bucket" {
-}
-
-resource "aws_s3_bucket_acl" "my_bucket_acl" {
-  bucket = aws_s3_bucket.my_bucket.id
-  acl    = "private"
-} */
