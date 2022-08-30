@@ -9,12 +9,18 @@ variable "name" {
   type        = string
   default     = "vpc10"
 }
+
 variable "cidr" {
   description = "vpc cidr"
   type        = string
   default     = "10.10.0.0/16"
 }
 
+
+
+################################################################################
+################################################################################
+################################################################################
 variable "azs" {
   description = "Availability zone for VPC"
   type        = list(string)
@@ -36,6 +42,11 @@ variable "public_subnets" {
 
 }
 
+
+
+################################################################################
+################################################################################
+################################################################################
 variable "project_name" {
   description = "project name"
   default     = "my_project"
@@ -43,9 +54,18 @@ variable "project_name" {
 
 variable "environment" {
   description = "ENV : dev test stag prod"
-  default     = "staging"
+  default     = "dev"
 }
 
+variable "owner" {
+  description = "owner name"
+  type        = string
+  default     = "oadmin"
+}
+
+################################################################################
+################################################################################
+################################################################################
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string

@@ -10,8 +10,16 @@ packer {
 locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
   # timestamp = formatdate("YYMMDD-hhmm", timestamp())
-  ami_name = "wordpress"
-  ami_version = 0.1 
+  ami_name    = "wordpress"
+  ami_version = 0.1
+  common_tags = {
+    Name        = "${local.ami_name}-${local.ami_version}_${local.timestamp}"
+    Project     = "project_name"
+    Owner       = "owner_name"
+    Environment = "environment_name"
+    Packer      = "true"
+    Description = "Managed by Packer"
+  }
 }
 
 source "amazon-ebs" "wordpress" {

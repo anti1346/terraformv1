@@ -24,5 +24,9 @@ provider "aws" {
   profile = "terraform"
   region  = "ap-northeast-2"
   /* shared_credentials_file = "~/.aws/credentials" */
+}
 
+provider "aws" {
+  alias  = "tokyo"
+  region = "ap-northeast-1"
 }

@@ -10,14 +10,15 @@ packer {
 locals {
   #   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
   timestamp   = formatdate("YYMMDDhhmm", timestamp())
-  ami_name    = "ubuntu"
+  ami_name    = "redis"
   ami_version = 0.1
   common_tags = {
     Name        = "${local.ami_name}-${local.ami_version}_${local.timestamp}"
     Project     = "project_name"
     Owner       = "owner_name"
     Environment = "environment_name"
-    Terraform   = "true"
+    Packer      = "true"
+    Description = "Managed by Packer"
   }
 }
 
@@ -61,9 +62,13 @@ build {
     environment_vars = [
       "FOO=hello world",
     ]
-    script       = "provisioning-scripts/z.sh"
-    pause_before = "10s"
-    timeout      = "10s"
+    inline = [
+      "echo Installing Redis",
+      "sleep 30",
+      "sudo apt-get update",
+      "sudo apt-get install -y redis-server",
+      "echo \"FOO is $FOO\" > example.txt",
+    ]
   }
 
   provisioner "shell" {
