@@ -1,0 +1,35 @@
+---
+# tasks file for roles/mysql
+
+- name: Install Packages for MySQL
+  apt:
+    name: "{{ mysql_packages }}"
+    state: latest
+    update_cache: yes
+
+- name: Start MySQL Service
+  service:
+    name: mysql
+    enabled: yes
+    state: started
+
+- name: Create wordpress Database
+  mysql_db:
+    name: "{{ database_name }}"
+    state: present
+    login_unix_socket: "{{ database_unix_socket }}"
+
+- name: Create Database User
+  mysql_user:
+    name: "{{ database_user }}"
+    password: "{{ database_password }}"
+    priv: "{{ database_name }}.*:ALL,GRANT"
+    state: present
+    login_unix_socket: "{{ database_unix_socket }}"
+
+- name: Copy Wordpress Configuration Files for MySQL
+  template:
+    src: wp-config.php.j2
+    dest: "{{ wordpress_directory }}/wordpress"
+    owner: www-data
+    group: www-data

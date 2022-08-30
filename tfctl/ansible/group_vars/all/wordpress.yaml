@@ -1,0 +1,4 @@
+wordpress_directory: /srv/www
+wordpress_version: "6.0"
+wordpress_source_file: "wordpress-{{ wordpress_version }}.tar.gz"
+wordpress_source_url: "https://wordpress.org/{{ wordpress_source_file }}"

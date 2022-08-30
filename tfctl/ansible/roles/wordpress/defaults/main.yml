@@ -1,0 +1,5 @@
+---
+# defaults file for roles/wordpress
+
+apache_packages: apache2, php, php-mysql, libapache2-mod-php
+

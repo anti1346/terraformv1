@@ -45,3 +45,9 @@ variable "environment" {
   description = "ENV : dev test stag prod"
   default     = "staging"
 }
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t3.small"
+}

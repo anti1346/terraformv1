@@ -1,0 +1,13 @@
+plugin: aws_ec2
+
+boto_profile: terraform
+
+region:
+  - ap-northeast-2
+
+# filters:
+# #  tag:Name: MyInstanceA
+#   tag:Name:
+#     - MyInstanceA
+#     - MyInstanceB
+#   tag:Env: terraform

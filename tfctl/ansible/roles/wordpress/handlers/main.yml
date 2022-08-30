@@ -1,0 +1,7 @@
+---
+# handlers file for roles/wordpress
+- name: Restart Apache2 Service
+  service:
+    name: apache2
+    state: restarted
+

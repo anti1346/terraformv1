@@ -1,0 +1,15 @@
+{{ ansible_managed | comment }}
+
+<VirtualHost *:80>
+    DocumentRoot "{{ wordpress_directory }}/wordpress"
+    <Directory "{{ wordpress_directory }}/wordpress">
+        Options FollowSymLinks
+        AllowOverride Limit Options FileInfo
+        DirectoryIndex index.php
+        Require all granted
+    </Directory>
+    <Directory "{{ wordpress_directory }}/wordpress/wp-content">
+        Options FollowSymLinks
+        Require all granted
+    </Directory>
+</VirtualHost>

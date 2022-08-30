@@ -1,0 +1,60 @@
+---
+# tasks file for roles/wordpress
+
+- name: Install Packages for Apache2
+  apt:
+    name: "{{ apache_packages }}"
+    state: latest
+    update_cache: true
+
+- name: Create Wordpress Directory
+  file:
+    path: "{{ wordpress_directory }}"
+    owner: www-data
+    group: www-data
+    state: directory
+
+- name: Download Wordpress Source
+  get_url:
+    url: "{{ wordpress_source_url }}"
+    dest: /tmp
+
+- name: Unarchive Wordpress Tar
+  unarchive:
+    src: "/tmp/{{ wordpress_source_file }}"
+    remote_src: yes
+    dest: /srv/www
+    owner: www-data
+    group: www-data
+
+- name: Copy Wordpress Configuration for Apache2
+  template:
+    src: wordpress.conf.j2
+    dest: /etc/apache2/sites-available/wordpress.conf
+
+- name: Enable Wordpress Site for Apache2
+  file:
+    src: /etc/apache2/sites-available/wordpress.conf
+    path: /etc/apache2/sites-enabled/wordpress.conf
+    state: link
+  notify:
+  - Restart Apache2 Service
+
+- name: Disable Default Site for Apache2
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+
+- name: Enable Rewrite Module for Apache2
+  apache2_module:
+    name: rewrite
+    state: present
+  notify:
+  - Restart Apache2 Service
+
+- name: Start/Enable Apache2 Service
+  service:
+    name: apache2
+    enabled: yes
+    state: started
+
