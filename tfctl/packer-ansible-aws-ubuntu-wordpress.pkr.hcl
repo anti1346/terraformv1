@@ -9,9 +9,9 @@ packer {
 
 locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
-  # timestamp = formatdate("YYMMDD-hhmm", timestamp(), "[- TZ:]")
-  ami_name    = "wordpress"
-  ami_version = 0.1
+  # timestamp = formatdate("YYMMDD-hhmm", timestamp())
+  ami_name = "wordpress"
+  ami_version = 0.1 
 }
 
 source "amazon-ebs" "wordpress" {

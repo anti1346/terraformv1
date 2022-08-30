@@ -24,7 +24,7 @@ module "vpc" {
 
   /* lifecycle {
     ignore_changes = [
-      tags["Createddate"]
+      tags["timestamp"]
     ]
   } */
 
@@ -47,11 +47,11 @@ resource "aws_instance" "ubuntu" {
   /* subnet_id = module.${var.vpc_name}.public_subnets[0].id */
   subnet_id = module.vpc.public_subnets[0]
 
-  key_name               = aws_key_pair.my_sshkey.key_name
+  key_name = aws_key_pair.my_sshkey.key_name
 
   lifecycle {
     ignore_changes = [
-      tags["Createddate"],
+      tags["timestamp"],
     ]
   }
 
@@ -59,7 +59,7 @@ resource "aws_instance" "ubuntu" {
     local.common_tags,
     {
       Description = "description definition"
-      Createddate = timestamp()
+      timestamp   = timestamp()
 
     }
   )
@@ -71,7 +71,7 @@ resource "aws_eip" "my_eip" {
 
   lifecycle {
     ignore_changes = [
-      tags["Createddate"],
+      tags["timestamp"],
     ]
   }
 
@@ -79,7 +79,7 @@ resource "aws_eip" "my_eip" {
     local.common_tags,
     {
       Description = "description definition"
-      Createddate = timestamp()
+      timestamp   = timestamp()
     }
   )
 }
