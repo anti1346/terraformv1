@@ -11,15 +11,16 @@ packer {
 ################################################################################
 ################################################################################
 variables {
-  aws_region       = "ap-northeast-2"
   aws_profile      = "terraform"
+  aws_region       = "ap-northeast-2"
+  ami_name         = "ubuntu18" #amazon2 | ubuntu22 | ubuntu18
+  source_name      = "ubuntu18" #amazon2 | ubuntu22 | ubuntu18
+  ami_version      = "0.1"
   instance_type    = "t3.small"
-  project_name     = "project_name"
-  owner_name       = "owner_name"
-  environment_name = "environment_name"
+  project_name     = "web project"
+  owner_name       = "pkradmin"
+  environment_name = "development" #development | testing | staging | production 
   description      = "Managed by Packer"
-  ami_name         = "amazon2" #ubuntu|amazon2
-  sources          = "amazon2" #ubuntu|amazon2
 
 }
 
@@ -30,7 +31,7 @@ locals {
   #   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
   timestamp   = formatdate("YYMMDDhhmm", timestamp())
   ami_name    = var.ami_name
-  ami_version = 0.1
+  ami_version = var.ami_version
   common_tags = {
     Name        = "${local.ami_name}-${local.ami_version}_${local.timestamp}"
     Project     = var.project_name
@@ -44,48 +45,6 @@ locals {
 ################################################################################
 ################################################################################
 ################################################################################
-#### ubuntu(official accounts : 099720109477)
-source "amazon-ebs" "ubuntu" {
-  profile                     = var.aws_profile
-  region                      = var.aws_region
-  ami_name                    = "${local.ami_name}-${local.ami_version}_${local.timestamp}"
-  instance_type               = var.instance_type
-  ssh_username                = ubuntu
-  associate_public_ip_address = true
-
-  source_ami_filter {
-    filters = {
-      name                = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
-      root-device-type    = "ebs"
-      virtualization-type = "hvm"
-    }
-    most_recent = true
-    owners      = ["099720109477"]
-  }
-
-  tags = merge(
-    local.common_tags,
-    {
-      Description = var.description
-    }
-  )
-
-  run_tags = merge(
-    local.common_tags,
-    {
-      Description = var.description
-    }
-  )
-
-  snapshot_tags = merge(
-    local.common_tags,
-    {
-      Description = var.description
-    }
-  )
-
-}
-
 ##### amazon(official accounts : 137112412989)
 source "amazon-ebs" "amazon2" {
   profile                     = var.aws_profile
@@ -97,7 +56,7 @@ source "amazon-ebs" "amazon2" {
 
   source_ami_filter {
     filters = {
-      name                = "amzn2-ami-kernel-*-hvm-*-x86_64-gp2"
+      name                = "amzn2-ami-hvm-2.0.*-x86_64-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -125,7 +84,88 @@ source "amazon-ebs" "amazon2" {
       Description = var.description
     }
   )
+}
 
+#### ubuntu(official accounts : 099720109477)
+source "amazon-ebs" "ubuntu22" {
+  profile                     = var.aws_profile
+  region                      = var.aws_region
+  ami_name                    = "${local.ami_name}-${local.ami_version}_${local.timestamp}"
+  instance_type               = var.instance_type
+  ssh_username                = "ubuntu"
+  associate_public_ip_address = true
+
+  source_ami_filter {
+    filters = {
+      name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
+      root-device-type    = "ebs"
+      virtualization-type = "hvm"
+    }
+    most_recent = true
+    owners      = ["099720109477"]
+  }
+
+  tags = merge(
+    local.common_tags,
+    {
+      Description = var.description
+    }
+  )
+
+  run_tags = merge(
+    local.common_tags,
+    {
+      Description = var.description
+    }
+  )
+
+  snapshot_tags = merge(
+    local.common_tags,
+    {
+      Description = var.description
+    }
+  )
+}
+
+#### ubuntu(official accounts : 099720109477)
+source "amazon-ebs" "ubuntu18" {
+  profile                     = var.aws_profile
+  region                      = var.aws_region
+  ami_name                    = "${local.ami_name}-${local.ami_version}_${local.timestamp}"
+  instance_type               = var.instance_type
+  ssh_username                = "ubuntu"
+  associate_public_ip_address = true
+
+  source_ami_filter {
+    filters = {
+      name                = "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"
+      root-device-type    = "ebs"
+      virtualization-type = "hvm"
+    }
+    most_recent = true
+    owners      = ["099720109477"]
+  }
+
+  tags = merge(
+    local.common_tags,
+    {
+      Description = var.description
+    }
+  )
+
+  run_tags = merge(
+    local.common_tags,
+    {
+      Description = var.description
+    }
+  )
+
+  snapshot_tags = merge(
+    local.common_tags,
+    {
+      Description = var.description
+    }
+  )
 }
 
 ##### centos(official accounts : 125523088429)
@@ -136,7 +176,7 @@ source "amazon-ebs" "amazon2" {
 build {
   name = "${local.ami_name}-${local.ami_version}_${local.timestamp}"
   sources = [
-    "source.amazon-ebs.${var.sources}"
+    "source.amazon-ebs.${var.source_name}"
   ]
 
   provisioner "shell" {
