@@ -1,6 +1,11 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
+sudo yum update -y
+
+## Apache　Setup
 sudo yum install -y httpd
+
+sudo chown -R apache:apache /var/www/html
 
 sudo systemctl --now enable httpd
 

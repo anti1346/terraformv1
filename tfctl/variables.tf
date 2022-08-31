@@ -59,7 +59,7 @@ variable "project_name" {
 }
 
 variable "environment" {
-  description = "Environment : development | testing | staging | production "
+  description = "Environment : development | testing | staging | production"
   default     = "development"
 }
 
