@@ -12,7 +12,7 @@ packer {
 ################################################################################
 variables {
   aws_profile      = "terraform"
-  aws_region       = "ap-northeast-2"
+  aws_region       = "ap-northeast-2" #{ 서울:ap-northeast-2, 도쿄:ap-northeast-1, 싱가포르:ap-southeast-1, 버지니아:us-east-1, 오리건:us-west-2 }
   ami_name         = "ubuntu18" #amazon2 | ubuntu22 | ubuntu18
   source_name      = "ubuntu18" #amazon2 | ubuntu22 | ubuntu18
   ami_version      = "0.1"
