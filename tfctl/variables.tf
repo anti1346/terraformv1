@@ -28,13 +28,6 @@ variable "azs" {
 
 }
 
-variable "private_subnets" {
-  description = "private subnets for vpc"
-  type        = list(string)
-  default     = ["10.10.101.0/24", "10.10.102.0/24"]
-
-}
-
 variable "public_subnets" {
   description = "public subnets for vpc"
   type        = list(string)
@@ -42,6 +35,19 @@ variable "public_subnets" {
 
 }
 
+variable "private_subnets" {
+  description = "private subnets for vpc"
+  type        = list(string)
+  default     = ["10.10.101.0/24", "10.10.102.0/24"]
+
+}
+
+variable "database_subnets" {
+  description = "public subnets for vpc"
+  type        = list(string)
+  default     = ["10.10.201.0/24", "10.10.202.0/24"]
+
+}
 
 
 ################################################################################
@@ -53,8 +59,8 @@ variable "project_name" {
 }
 
 variable "environment" {
-  description = "ENV : dev test stag prod"
-  default     = "dev"
+  description = "Environment : development | testing | staging | production "
+  default     = "development"
 }
 
 variable "owner" {

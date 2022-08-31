@@ -17,11 +17,12 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.14.2"
 
-  name            = var.name
-  cidr            = var.cidr
-  azs             = var.azs
-  private_subnets = var.private_subnets
-  public_subnets  = var.public_subnets
+  name             = var.name
+  cidr             = var.cidr
+  azs              = var.azs
+  private_subnets  = var.private_subnets
+  public_subnets   = var.public_subnets
+  database_subnets = var.database_subnets
 
   enable_nat_gateway = false
   enable_vpn_gateway = false
@@ -69,7 +70,7 @@ resource "aws_key_pair" "my_sshkey" {
 resource "aws_instance" "ec2instance_web" {
   /* count = 2 */
   count                  = length(var.public_subnets)
-  ami                    = data.aws_ami.ubuntu.id
+  ami                    = data.aws_ami.ubuntu_jammy.id
   instance_type          = var.instance_type
   subnet_id              = module.vpc.public_subnets[count.index]
   key_name               = aws_key_pair.my_sshkey.key_name
